@@ -1,6 +1,12 @@
+const task = require('../models/task')
 const Task = require('../models/task')
-const getAllTasks = (req, res)=>{
-    res.send("all tasks")
+const getAllTasks = async (req, res)=>{
+    try {
+        const tasks = await Task.find({})
+        res.status(200).json({tasks})
+    } catch (error) {
+        res.status(500).json({msg: error})
+    }
 }
 
 const createTask = async (req, res) =>{
@@ -15,14 +21,44 @@ const createTask = async (req, res) =>{
 
     }
 }
-const getTask = (req, res) =>{
-    res.json({id: req.params.id})
+const getTask = async (req, res) =>{
+    try {
+        const {taskID} = req.params
+        const task = await Task.findOne({__id: taskID})
+        if(!task){
+            return res.status(404).json({msg: `There is no task with ${taskID}`})
+        }
+        res.status(200).json({task})
+    } catch (error) {
+        res.status(500).json({msg: error})
+    }
 }
-const updateTask = (req, res) =>{
-    res.send("update single task")
+const updateTask = async (req, res) =>{
+    try {
+        const {id: taskID} = req.params
+        const task = await Task.findOneAndUpdate({_id: taskID}, req.body, {
+            new: true, 
+            runValidators: true
+        })
+        if(!task){
+            return res.status(404).json({msg: `There is no task with ${taskID}`})
+        }
+        res.status(200).json(task)
+    } catch (error) {
+        res.status(500).json({msg: error})
+    }
 }
-const deleteTask = (req, res) =>{
-    res.send("delete single task")
+const deleteTask = async (req, res) =>{
+    try {
+        const {id: taskID} = req.params
+        const task = await Task.findByIdAndDelete(taskID)
+        if(!task){
+            return res.status(404).json({msg: `There is no task with ${taskID}`})
+        }
+        res.status(200).json(task)
+    } catch (error) {
+        res.status(500).json({msg: error})
+    }
 }
 
 
