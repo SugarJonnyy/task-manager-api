@@ -1,9 +1,9 @@
+require('dotenv').config()
 const express = require('express')
 const app = express()
 const tasksRouter = require('./router/tasks')
 app.use(express.json()) // json parsing middleware
 const connectDB = require('./db/connect')
-require('dotenv').config()
 
 //router
 app.get('/', (req, res)=>{
