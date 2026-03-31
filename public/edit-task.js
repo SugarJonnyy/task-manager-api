@@ -4,8 +4,8 @@ const taskCompletedDOM = document.querySelector('.task-edit-completed')
 const editFormDOM = document.querySelector('.single-task-form')
 const editBtnDOM = document.querySelector('.task-edit-btn')
 const formAlertDOM = document.querySelector('.form-alert')
-const params = window.location.search
-const id = new URLSearchParams(params).get('id')
+
+const id = new URLSearchParams(window.location.search).get('id')
 let tempName
 
 const showTask = async () => {
@@ -29,35 +29,30 @@ const showTask = async () => {
 showTask()
 
 editFormDOM.addEventListener('submit', async (e) => {
-  editBtnDOM.textContent = 'Loading...'
   e.preventDefault()
+  editBtnDOM.textContent = 'Loading...'
   try {
-    const taskName = taskNameDOM.value
-    const taskCompleted = taskCompletedDOM.checked
-
     const {
       data: { task },
     } = await axios.patch(`/api/v1/tasks/${id}`, {
-      name: taskName,
-      completed: taskCompleted,
+      name: taskNameDOM.value,
+      completed: taskCompletedDOM.checked,
     })
-
     const { _id: taskID, completed, name } = task
 
     taskIDDOM.textContent = taskID
     taskNameDOM.value = name
     tempName = name
-    if (completed) {
-      taskCompletedDOM.checked = true
-    }
+    taskCompletedDOM.checked = completed
+
     formAlertDOM.style.display = 'block'
-    formAlertDOM.textContent = `success, edited task`
+    formAlertDOM.textContent = 'success, task edited'
     formAlertDOM.classList.add('text-success')
   } catch (error) {
     console.error(error)
     taskNameDOM.value = tempName
     formAlertDOM.style.display = 'block'
-    formAlertDOM.innerHTML = `error, please try again`
+    formAlertDOM.innerHTML = 'error, please try again'
   }
   editBtnDOM.textContent = 'Edit'
   setTimeout(() => {
