@@ -252,25 +252,10 @@ form > :last-child { margin-bottom: 0; }
   gap: 0.6rem;
 }
 
-.single-task span {
-  display: inline-flex;
-  align-items: center;
-  width: 1rem;
-}
-
-.single-task .fa-check-circle {
-  font-size: 0.875rem;
-  color: var(--success);
-  visibility: hidden;
-}
 
 .task-completed h5 {
   text-decoration: line-through;
   color: var(--text-muted);
-}
-
-.task-completed .fa-check-circle {
-  visibility: visible;
 }
 
 .task-links {
